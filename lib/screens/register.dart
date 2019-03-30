@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' show get;
+import 'dart:convert';
 
 class Register extends StatefulWidget {
   @override
@@ -9,6 +11,9 @@ class _RegisterState extends State<Register> {
   // Key
   final registerFormKey = GlobalKey<FormState>();
 
+  // Explicit
+  String name, email, password;
+
   // Name
   Widget nameTextField() {
     return TextFormField(
@@ -18,6 +23,9 @@ class _RegisterState extends State<Register> {
         if (value.length == 0) {
           return 'Please Type Your Name';
         }
+      },
+      onSaved: (String value) {
+        name = value;
       },
     );
   }
@@ -32,6 +40,9 @@ class _RegisterState extends State<Register> {
           return 'Please Type Email Format you@email.com';
         }
       },
+      onSaved: (String value) {
+        email = value;
+      },
     );
   }
 
@@ -45,23 +56,40 @@ class _RegisterState extends State<Register> {
           return 'Please Type Password more 6 Charator';
         }
       },
-    );
-  }
-
-  // For Action
-  Widget showAction() {
-    return IconButton(
-      tooltip: 'Upload Value To Server',
-      icon: Icon(Icons.cloud_upload),
-      onPressed: () {
-        uploadValueToServer();
+      onSaved: (String value) {
+        password = value;
       },
     );
   }
 
-  void uploadValueToServer() {
+  // For Action
+  Widget showAction(BuildContext context) {
+    return IconButton(
+      tooltip: 'Upload Value To Server',
+      icon: Icon(Icons.cloud_upload),
+      onPressed: () {
+        uploadValueToServer(context);
+      },
+    );
+  }
+
+  void uploadValueToServer(BuildContext context) async{
     print('You Click Upload');
     print(registerFormKey.currentState.validate());
+    if (registerFormKey.currentState.validate()) {
+      registerFormKey.currentState.save();
+      print('name = $name, email = $email, password = $password');
+
+      String urlString = 'https://www.androidthai.in.th/mac/addDataMaster.php?isAdd=true&Name=$name&Email=$email&Password=$password';
+      var response = await get(urlString);
+      var result = json.decode(response.body);
+      print('result = $result');
+
+      if (result.toString() == 'true') {
+        Navigator.pop(context);
+      }
+
+    }
   }
 
   @override
@@ -70,7 +98,7 @@ class _RegisterState extends State<Register> {
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: Text('Register'),
-          actions: <Widget>[showAction()],
+          actions: <Widget>[showAction(context)],
         ),
         body: Form(
           key: registerFormKey,
@@ -88,8 +116,8 @@ class _RegisterState extends State<Register> {
                     color: Colors.white,
                     border: Border.all(
                         style: BorderStyle.solid,
-                        width: 3.0,
-                        color: Colors.blue)),
+                        width: 2.0,
+                        color: Colors.blue[900])),
                 margin: EdgeInsets.all(50.0),
                 child: Column(
                   children: <Widget>[
