@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'register.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -56,14 +57,19 @@ class _HomeState extends State<Home> {
   }
 
   // Button SignUp
-  Widget signUpButton() {
+  Widget signUpButton(BuildContext context) {
     return RaisedButton(
       color: Colors.red[200],
       child: Text(
         'Sing Up',
         style: TextStyle(color: Colors.white),
       ),
-      onPressed: () {},
+      onPressed: () {
+        print('You Click SignUp');
+        var registerRoute = new MaterialPageRoute(
+            builder: (BuildContext context) => Register());
+        Navigator.of(context).push(registerRoute);
+      },
     );
   }
 
@@ -99,7 +105,7 @@ class _HomeState extends State<Home> {
                       child: signInButton(),
                     ),
                     new Expanded(
-                      child: signUpButton(),
+                      child: signUpButton(context),
                     )
                   ],
                 ),
