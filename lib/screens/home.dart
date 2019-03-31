@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'register.dart';
 import 'package:http/http.dart' show get;
 import 'dart:convert';
+import '../models/user_model.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -100,7 +101,22 @@ class _HomeState extends State<Home> {
         showSnackBar('No $email in my Database');
       } else {
         // User True
-        
+        for (var objJSON in result) {
+          print('objJSON = $objJSON');
+          var userModel = UserModel.fromJSON(objJSON);
+          String truePassword = userModel.password.toString();
+          String nameLogin = userModel.name.toString();
+
+          if (password == truePassword) {
+            showSnackBar('Welcome $nameLogin');
+          } else {
+            showSnackBar('Please Try Again Password False');
+          }
+
+        }
+
+
+
       }
     }
   }
