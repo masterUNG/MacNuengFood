@@ -3,6 +3,7 @@ import 'register.dart';
 import 'package:http/http.dart' show get;
 import 'dart:convert';
 import '../models/user_model.dart';
+import 'add_food.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -72,7 +73,7 @@ class _HomeState extends State<Home> {
   }
 
   // Button SignIn
-  Widget signInButton() {
+  Widget signInButton(BuildContext context) {
     return RaisedButton(
       color: Colors.red[800],
       child: Text(
@@ -80,12 +81,12 @@ class _HomeState extends State<Home> {
         style: TextStyle(color: Colors.white),
       ),
       onPressed: () {
-        checkEmailAnPass();
+        checkEmailAnPass(context);
       },
     );
   }
 
-  void checkEmailAnPass() async {
+  void checkEmailAnPass(BuildContext context) async {
     if (homeFormKey.currentState.validate()) {
       homeFormKey.currentState.save();
       print('email = $email, password = $password');
@@ -109,14 +110,13 @@ class _HomeState extends State<Home> {
 
           if (password == truePassword) {
             showSnackBar('Welcome $nameLogin');
+            var addFoodRoute = new MaterialPageRoute(
+                builder: (BuildContext context) => AddFood(nameLogin: nameLogin,));
+            Navigator.of(context).push(addFoodRoute);
           } else {
             showSnackBar('Please Try Again Password False');
           }
-
         }
-
-
-
       }
     }
   }
@@ -127,7 +127,8 @@ class _HomeState extends State<Home> {
       duration: new Duration(seconds: 8),
       content: Text(messageString),
       action: new SnackBarAction(
-        label: 'Close', onPressed: (){},
+        label: 'Close',
+        onPressed: () {},
       ),
     );
     homeScaffoldkey.currentState.showSnackBar(snackBar);
@@ -182,7 +183,7 @@ class _HomeState extends State<Home> {
                     child: Row(
                       children: <Widget>[
                         new Expanded(
-                          child: signInButton(),
+                          child: signInButton(context),
                         ),
                         new Expanded(
                           child: signUpButton(context),
