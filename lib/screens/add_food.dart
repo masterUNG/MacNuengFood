@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../models/food_model.dart';
 import '../models/post_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class AddFood extends StatefulWidget {
   final String nameLogin;
@@ -55,14 +56,26 @@ class _AddFoodState extends State<AddFood> {
       myFoodModels.add(FoodModel.formJSON(objJSON));
     }
 
-    setState(() {});
+    setState(() {
+      
+    });
+  }
+
+  Widget showIcon(String pathUrl) {
+    return CachedNetworkImage(
+      imageUrl: pathUrl,
+    );
   }
 
   Widget showListView(BuildContext context1) {
     return ListView.builder(
       itemCount: myFoodModels.length,
       itemBuilder: (context1, int index) {
-        return Text(myFoodModels[index].NameFood);
+        return Container(
+          child: Row(
+            children: <Widget>[Image.asset(myFoodModels[index].ImagePath)],
+          ),
+        );
       },
     );
   }
