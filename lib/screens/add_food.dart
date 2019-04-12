@@ -4,6 +4,7 @@ import 'dart:convert';
 import '../models/food_model.dart';
 import '../models/post_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'food_listview.dart';
 
 class AddFood extends StatefulWidget {
   final String nameLogin;
@@ -52,12 +53,10 @@ class _AddFoodState extends State<AddFood> {
     var result = json.decode(response.body);
     print(result);
 
-    for (var objJSON in result) {
-      myFoodModels.add(FoodModel.formJSON(objJSON));
-    }
-
     setState(() {
-      
+      for (var objJSON in result) {
+        myFoodModels.add(FoodModel.formJSON(objJSON));
+      }
     });
   }
 
@@ -73,7 +72,7 @@ class _AddFoodState extends State<AddFood> {
       itemBuilder: (context1, int index) {
         return Container(
           child: Row(
-            children: <Widget>[Image.asset(myFoodModels[index].ImagePath)],
+            children: <Widget>[],
           ),
         );
       },
@@ -86,6 +85,7 @@ class _AddFoodState extends State<AddFood> {
         appBar: AppBar(
           title: showTitle(),
         ),
-        body: showListView(context));
+        body: FoodListView(myFoodModels)
+        );
   }
 }
